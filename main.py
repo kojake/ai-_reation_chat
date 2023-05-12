@@ -1,4 +1,6 @@
 import json
+import requests
+from bs4 import BeautifulSoup
 
 def open_View():
     # JSONからデータを読み込む
@@ -27,6 +29,49 @@ def open_View():
                 print("😃：また話そうね")
                 open_View()
                 break
+            if Waiting_for_conversation_reply == "天気は何":
+
+                weather = 0
+
+                # スクレイピング対象のURL
+                url_base = "https://tenki.jp/forecast/weathe/"
+
+                # 県名を入力する
+                prefecture = input("県名を入力してください: ")
+
+                if url_base == "札幌":
+                    weather = 1
+                elif url_base == "仙台":
+                    weather = 2
+                elif url_base == "東京":
+                    weather = 3
+                elif url_base == "新潟" or url_base == "金沢":
+                    weather = 4
+                elif url_base == "名古屋":
+                    weather = 5
+                elif url_base == "大阪":
+                    weather = 6
+                elif url_base == "広島":
+                    weather = 7
+                elif url_base == "高知":
+                    url_base = 8
+                elif url_base == "福岡" or url_base == "鹿児島":
+                    url_base = 9
+                elif url_base == "那覇":
+                    url_base = 10
+
+                # URLにリクエストを送信してHTMLを取得する
+                url = url_base.format(prefecture)
+                res = requests.get(url)
+                html = res.content
+
+                # BeautifulSoupを使ってHTMLを解析する
+                soup = BeautifulSoup(html, "html.parser")
+
+                # 天気情報を取得する
+                weather = soup.find(class_="weather-telop").get_text()
+                print(prefecture + "の天気はです。".format(prefecture, weather))
+                
             #アルゴリズムに回答する情報が入っているかを確認する
             if Conversation_list:
                 for item in Conversation_list.items():
