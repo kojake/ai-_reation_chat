@@ -31,46 +31,27 @@ def open_View():
                 break
             if Waiting_for_conversation_reply == "天気は何":
 
-                weather = 0
-
-                # スクレイピング対象のURL
-                url_base = "https://tenki.jp/forecast/weathe/"
-
                 # 県名を入力する
                 prefecture = input("県名を入力してください: ")
 
-                if url_base == "札幌":
-                    weather = 1
-                elif url_base == "仙台":
-                    weather = 2
-                elif url_base == "東京":
-                    weather = 3
-                elif url_base == "新潟" or url_base == "金沢":
-                    weather = 4
-                elif url_base == "名古屋":
-                    weather = 5
-                elif url_base == "大阪":
-                    weather = 6
-                elif url_base == "広島":
-                    weather = 7
-                elif url_base == "高知":
-                    url_base = 8
-                elif url_base == "福岡" or url_base == "鹿児島":
-                    url_base = 9
-                elif url_base == "那覇":
-                    url_base = 10
-
-                # URLにリクエストを送信してHTMLを取得する
-                url = url_base.format(prefecture)
-                res = requests.get(url)
-                html = res.content
-
-                # BeautifulSoupを使ってHTMLを解析する
-                soup = BeautifulSoup(html, "html.parser")
+                if prefecture in ["北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県"]:
+                    url = "https://tenki.jp/forecast/3/16/4410/14100/{}-prefecture/".format(prefecture)
+                elif prefecture in ["東京都", "神奈川県", "埼玉県", "千葉県", "茨城県", "栃木県", "群馬県", "山梨県"]:
+                    url = "https://tenki.jp/forecast/3/16/4410/13100/{}-prefecture/".format(prefecture)
+                elif prefecture in ["新潟県", "富山県", "石川県", "福井県", "長野県", "岐阜県", "静岡県", "愛知県"]:
+                    url = "https://tenki.jp/forecast/3/16/4410/15100/{}-prefecture/".format(prefecture)
+                elif prefecture in ["三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県"]:
+                    url = "https://tenki.jp/forecast/3/16/4410/6210/{}-prefecture/".format(prefecture)
+                elif prefecture in ["鳥取県", "島根県", "岡山県", "広島県", "山口県"]:
+                    url = "https://tenki.jp/forecast/3/16/4410/34100/{}-prefecture/".format(prefecture)
 
                 # 天気情報を取得する
-                weather = soup.find(class_="weather-telop").get_text()
-                print(prefecture + "の天気はです。".format(prefecture, weather))
+                weather_element = soup.find(class_="weather-telop")
+                if weather_element is not None:
+                    weather = weather_element.get_text()
+                    print(prefecture + "の天気は" + weather + "です。")
+                else:
+                    print("天気情報が見つかりませんでした。")
                 
             #アルゴリズムに回答する情報が入っているかを確認する
             if Conversation_list:
