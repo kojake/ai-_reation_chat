@@ -35,36 +35,34 @@ def open_View():
                 url_base = "https://tenki.jp/forecast/{}/"
 
                 # 県名を入力する
-                prefecture = input("県名を入力してください: ")
+                print(
+                    "北海道の地域\n"
+                    "稚内	1100\n"
+                    "旭川	1200\n"
+                    "留萌	1300\n"
+                    "札幌	1400\n"
+                    "岩見沢	1500\n"
+                    "倶知安	1600\n"
+                    "網走	1710\n"
+                    "北見	1720\n"
+                    "紋別	1730\n"
+                    "根室	1800\n"
+                    "釧路	1900\n"
+                    "帯広	2000\n"
+                    "室蘭	2100\n"
+                    "浦河	2200\n"
+                    "函館	2300\n"
+                    "江差	2400\n"
+                )
+                prefecture_where_you_live = input("県と地域のコードをリストで出すので入力して下さい ==>")
 
-                if prefecture in ["北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県"]:
-                    url = "https://tenki.jp/forecast/3/16/4410/14100/{}-prefecture/".format(prefecture)
-                elif prefecture in ["東京都", "神奈川県", "埼玉県", "千葉県", "茨城県", "栃木県", "群馬県", "山梨県"]:
-                    url = "https://tenki.jp/forecast/3/16/4410/13100/{}-prefecture/".format(prefecture)
-                elif prefecture in ["新潟県", "富山県", "石川県", "福井県", "長野県", "岐阜県", "静岡県", "愛知県"]:
-                    url = "https://tenki.jp/forecast/3/16/4410/15100/{}-prefecture/".format(prefecture)
-                elif prefecture in ["三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県"]:
-                    url = "https://tenki.jp/forecast/3/16/4410/6210/{}-prefecture/".format(prefecture)
-                elif prefecture in ["鳥取県", "島根県", "岡山県", "広島県", "山口県"]:
-                    url = "https://tenki.jp/forecast/3/16/4410/34100/{}-prefecture/".format(prefecture)
-
-                # URLにリクエストを送信してHTMLを取得する
-                url = url_base.format(prefecture)
-                res = requests.get(url)
-                html = res.content
-
-                # BeautifulSoupを使ってHTMLを解析する
-                soup = BeautifulSoup(html, "html.parser")
-
-                # 天気情報を取得する
-                weather_element = soup.find(class_="weather-telop")
-                if weather_element is not None:
-                    weather = weather_element.get_text()
-                    print(prefecture + "の天気は" + weather + "です。")
-                    continue
-                else:
-                    print("天気情報が見つかりませんでした。")
-                    continue
+                url = "https://weather.yahoo.co.jp/weather/jp/13/" + str(prefecture_where_you_live) + ".html"
+                r = requests.get(url)
+                soup = BeautifulSoup(r.text, 'html.parser')
+                rs = soup.find(class_='forecastCity')
+                rs = [i.strip() for i in rs.text.splitlines()]
+                rs = [i for i in rs if i != ""]
+                return rs[0] + "の天気は" + rs + "、明日の天気は" + rs[19] + "です。"
                 
             #アルゴリズムに回答する情報が入っているかを確認する
             if Conversation_list:
