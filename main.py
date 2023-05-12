@@ -1,7 +1,7 @@
 import json
-#jsonからデータを読み込む
+# JSONからデータを読み込む
 with open("Conversation_list.json", "r", encoding="utf-8") as file:
-    Conversation_list = json.load(file)
+    json_string = file.read()
 
 print("アルゴリズム会話")
 print("_______________")
@@ -57,6 +57,10 @@ elif waiting_for_choices == "2":
             print("選択されたアルゴリズム")
             print("返信" + item[0] + "回答" + item[1])
             print("-------------------------------")
-            Final_confirmation_of_deletion = input("本当に削除しますか この操作は取り消せません？ y/n")
+            Final_confirmation_of_deletion = input("本当に削除しますか?この操作は取り消せません y/n ==>")
+            if Final_confirmation_of_deletion == "y":
+                remove_algolism = Conversation_list.pop(item[0])
+                with open("Conversation_list.json", "w", encoding="utf-8") as file:
+                    json.dump(remove_algolism, file)
         else:
             continue
