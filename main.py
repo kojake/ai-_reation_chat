@@ -31,6 +31,9 @@ def open_View():
                 break
             if Waiting_for_conversation_reply == "天気は何":
 
+                # スクレイピング対象のURL
+                url_base = "https://tenki.jp/forecast/{}/"
+
                 # 県名を入力する
                 prefecture = input("県名を入力してください: ")
 
@@ -45,13 +48,23 @@ def open_View():
                 elif prefecture in ["鳥取県", "島根県", "岡山県", "広島県", "山口県"]:
                     url = "https://tenki.jp/forecast/3/16/4410/34100/{}-prefecture/".format(prefecture)
 
+                # URLにリクエストを送信してHTMLを取得する
+                url = url_base.format(prefecture)
+                res = requests.get(url)
+                html = res.content
+
+                # BeautifulSoupを使ってHTMLを解析する
+                soup = BeautifulSoup(html, "html.parser")
+
                 # 天気情報を取得する
                 weather_element = soup.find(class_="weather-telop")
                 if weather_element is not None:
                     weather = weather_element.get_text()
                     print(prefecture + "の天気は" + weather + "です。")
+                    continue
                 else:
                     print("天気情報が見つかりませんでした。")
+                    continue
                 
             #アルゴリズムに回答する情報が入っているかを確認する
             if Conversation_list:
