@@ -29,41 +29,6 @@ def open_View():
                 print("😃：また話そうね")
                 open_View()
                 break
-            if Waiting_for_conversation_reply == "天気は何":
-
-                # スクレイピング対象のURL
-                url_base = "https://tenki.jp/forecast/{}/"
-
-                # 県名を入力する
-                print(
-                    "北海道の地域\n"
-                    "稚内	1100\n"
-                    "旭川	1200\n"
-                    "留萌	1300\n"
-                    "札幌	1400\n"
-                    "岩見沢	1500\n"
-                    "倶知安	1600\n"
-                    "網走	1710\n"
-                    "北見	1720\n"
-                    "紋別	1730\n"
-                    "根室	1800\n"
-                    "釧路	1900\n"
-                    "帯広	2000\n"
-                    "室蘭	2100\n"
-                    "浦河	2200\n"
-                    "函館	2300\n"
-                    "江差	2400\n"
-                )
-                prefecture_where_you_live = input("県と地域のコードをリストで出すので入力して下さい ==>")
-
-                url = "https://weather.yahoo.co.jp/weather/jp/13/" + str(prefecture_where_you_live) + ".html"
-                r = requests.get(url)
-                soup = BeautifulSoup(r.text, 'html.parser')
-                rs = soup.find(class_='forecastCity')
-                rs = [i.strip() for i in rs.text.splitlines()]
-                rs = [i for i in rs if i != ""]
-                return rs[0] + "の天気は" + rs + "、明日の天気は" + rs[19] + "です。"
-                
             #アルゴリズムに回答する情報が入っているかを確認する
             if Conversation_list:
                 for item in Conversation_list.items():
