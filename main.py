@@ -1,6 +1,7 @@
 import json
 import requests
 from bs4 import BeautifulSoup
+import os
 
 def open_View():
     # JSONからデータを読み込む
